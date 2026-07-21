@@ -1,86 +1,130 @@
 @import "tailwindcss";
 
-/* Class-based dark mode (matches the original site's <html class="dark"> strategy) */
+/* Class-based dark mode — the site is authored in light and dark from the start */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-sans: "Plus Jakarta Sans", Inter, system-ui, -apple-system, sans-serif;
 
-  /* Semantic color tokens -> resolve to CSS variables that flip per theme */
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-card: var(--bg-card);
-  --color-bg-sidebar: var(--bg-sidebar);
-  --color-bg-navbar: var(--bg-navbar);
-  --color-border-default: var(--border-default);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
+  /* Semantic tokens — resolve to CSS variables that flip per theme */
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-panel: var(--panel);
 
-  /* Soft elevation used by cards (flips with theme via --shadow-custom) */
-  --shadow-soft: var(--shadow-custom);
+  /* Colour is spent only where money moves */
+  --color-up: var(--up);
+  --color-up-soft: var(--up-soft);
+  --color-down: var(--down);
+  --color-down-soft: var(--down-soft);
 }
 
-/* Light theme (default) */
+/* Light — paper */
 :root {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-card: #fff;
-  --bg-elevated: #f8fafc;
-  --bg-sidebar: #1e2329;
-  --bg-navbar: #fff;
-  --border-default: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-disabled: #94a3b8;
-  --shadow-custom: 0 4px 20px -2px #0000000d, 0 2px 8px -1px #00000008;
+  --paper: #f7f6f3;
+  --ink: #101010;
+  --ink-soft: #55534e;
+  --ink-faint: #8a877f;
+  --rule: #e3e1db;
+  --panel: #fdfdfc;
+  --up: #15803d;
+  --up-soft: #e6f3ea;
+  --down: #dc2626;
+  --down-soft: #fdeceb;
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Dark theme */
+/* Dark — ink */
 .dark {
-  --bg-primary: #0b1220;
-  --bg-secondary: #111827;
-  --bg-card: #1e293b;
-  --bg-elevated: #273449;
-  --bg-sidebar: #0f172a;
-  --bg-navbar: #111827;
-  --border-default: #334155;
-  --border-hover: #475569;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-disabled: #64748b;
-  --shadow-custom: 0 4px 20px -2px #0000004d, 0 2px 8px -1px #0003;
+  --paper: #0e0e0d;
+  --ink: #f4f3f0;
+  --ink-soft: #b0aea8;
+  --ink-faint: #757369;
+  --rule: #242422;
+  --panel: #151514;
+  --up: #4ade80;
+  --up-soft: #132a1b;
+  --down: #f87171;
+  --down-soft: #2c1514;
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
-  background: #d43b0c;
-  color: #fff;
+  background: var(--ink);
+  color: var(--paper);
 }
 
-/* Subtle lift on hover, used by CTAs and cards */
-.hover-scale {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
-.hover-scale:hover {
+
+/* Links draw an underline left → right */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s var(--ease-settle);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Honest hover — buttons lift a touch, arrows slide */
+.btn-lift {
+  transition: transform 0.16s var(--ease-settle), background-color 0.16s ease,
+    color 0.16s ease, border-color 0.16s ease;
+}
+.btn-lift:hover {
   transform: translateY(-2px);
 }
+.btn-lift [data-arrow] {
+  transition: transform 0.16s var(--ease-settle);
+}
+.btn-lift:hover [data-arrow] {
+  transform: translateX(4px);
+}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Candles grow from their base */
+.bhn-candle {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* Underline-field form — baseline ink-in on focus */
+.field-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s var(--ease-settle);
+}
+.group:focus-within .field-line {
+  transform: scaleX(1);
 }

@@ -1,26 +1,26 @@
 import Navbar from '../components/Navbar'
-import Hero from '../components/Hero'
-import Features from '../components/Features'
-import SetupGuide from '../components/SetupGuide'
-import Interfaces from '../components/Interfaces'
-import WhyChoose from '../components/WhyChoose'
-import About from '../components/About'
-import Faq from '../components/Faq'
-import Contact from '../components/Contact'
-import Footer from '../components/Footer'
+import Hero from '../sections/Hero'
+import Features from '../sections/Features'
+import Preview from '../sections/Preview'
+import Why from '../sections/Why'
+import About from '../sections/About'
+import Faq from '../sections/Faq'
+import Contact from '../sections/Contact'
+import Footer from '../sections/Footer'
 
 export default function Landing({ isDark, onToggleTheme }) {
   return (
-    <div className="bg-bg-primary text-text-primary min-h-screen font-sans selection:bg-[#D43B0C] selection:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-paper text-ink font-sans transition-colors duration-300">
       <Navbar isDark={isDark} onToggleTheme={onToggleTheme} />
-      <Hero />
-      <Features />
-      <SetupGuide />
-      <Interfaces />
-      <WhyChoose />
-      <About />
-      <Faq />
-      <Contact />
+      <main>
+        <Hero isDark={isDark} />
+        <Features />
+        <Preview />
+        <Why />
+        <About />
+        <Faq />
+        <Contact />
+      </main>
       <Footer />
     </div>
   )
