@@ -8,7 +8,7 @@ const N = 46 // points across the width
 const LO = 16
 const HI = H - 16
 const XS = Array.from({ length: N }, (_, i) => (i / (N - 1)) * W)
-const TICK_MS = 900 // one new candle of data every ~0.9s
+const TICK_MS = 2000 // one new candle of data every ~2s — calm, not frantic
 const OPEN = 24500
 const PRICE_SCALE = 7 // rupees per vertical px
 
