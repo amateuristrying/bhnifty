@@ -28,10 +28,14 @@ const P2 = { x: 10 + 31 * STEP + BODY_W / 2, y: 80 - 14 }
 const SAG = { x: (P1.x + P2.x) / 2, y: Math.max(P1.y, P2.y) + 34 }
 const ROPE_D = `M${P1.x},${P1.y} Q${SAG.x},${SAG.y} ${P2.x},${P2.y}`
 
-/* walker slot sits at t≈0.55 along the rope (quadratic bezier point) */
+/* walker sits at t≈0.55 along the rope (quadratic bezier point) */
 const T = 0.55
 const wx = (1 - T) ** 2 * P1.x + 2 * (1 - T) * T * SAG.x + T ** 2 * P2.x
 const wy = (1 - T) ** 2 * P1.y + 2 * (1 - T) * T * SAG.y + T ** 2 * P2.y
+
+/* walker artwork: 255×320 source, feet 34.5% across its width */
+const WALKER_H = 54
+const WALKER_W = WALKER_H * (255 / 320)
 
 export default function CandleChart({ className = '' }) {
   return (
@@ -61,35 +65,17 @@ export default function CandleChart({ className = '' }) {
       {/* rope line-draws after the candles */}
       <path data-rope d={ROPE_D} fill="none" stroke="var(--ink)" strokeWidth="1.4" />
 
-      {/* still-silhouette slot — swap for the final walker asset */}
+      {/* the walker — a still silhouette balancing on the animated chart;
+          feet sit 34.5% across the artwork, anchored to the rope point */}
       <g data-walker transform={`translate(${wx}, ${wy})`}>
-        <rect
-          x="-14"
-          y="-46"
-          width="28"
-          height="44"
-          rx="4"
-          fill="var(--paper)"
-          stroke="var(--ink-faint)"
-          strokeWidth="1"
-          strokeDasharray="3 3"
+        <image
+          href="/walker.png"
+          x={-WALKER_W * 0.345}
+          y={-WALKER_H + 1}
+          width={WALKER_W}
+          height={WALKER_H}
+          className="dark:invert"
         />
-        <text
-          textAnchor="middle"
-          y="-24"
-          style={{ font: '700 6.5px "Plus Jakarta Sans", sans-serif', letterSpacing: '0.12em' }}
-          fill="var(--ink-faint)"
-        >
-          WALKER
-        </text>
-        <text
-          textAnchor="middle"
-          y="-15"
-          style={{ font: '700 6.5px "Plus Jakarta Sans", sans-serif', letterSpacing: '0.12em' }}
-          fill="var(--ink-faint)"
-        >
-          ASSET
-        </text>
       </g>
     </svg>
   )
