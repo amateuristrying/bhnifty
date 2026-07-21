@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap, SETTLE, MOTION_QUERY } from '../lib/motion'
+import useSmoothScroll from '../lib/useSmoothScroll'
 import Icon from '../components/Icon'
 import ThemeToggle from '../components/ThemeToggle'
 import Placeholder from '../components/Placeholder'
@@ -21,6 +22,9 @@ export default function Login({ isDark, onToggleTheme }) {
   const root = useRef(null)
   const [showPassword, setShowPassword] = useState(false)
   const [working, setWorking] = useState(false)
+
+  /* same inertial feel as the landing page; no section snapping here */
+  useSmoothScroll()
 
   /* Illustration wipes in on the left; label + serif heading + fields rise on the right */
   useEffect(() => {
