@@ -4,7 +4,6 @@ import { gsap, SETTLE, MOTION_QUERY } from '../lib/motion'
 import useSmoothScroll from '../lib/useSmoothScroll'
 import Icon from '../components/Icon'
 import ThemeToggle from '../components/ThemeToggle'
-import Placeholder from '../components/Placeholder'
 import Footer from '../sections/Footer'
 
 function GoogleG({ className = '' }) {
@@ -61,11 +60,12 @@ export default function Login({ isDark, onToggleTheme }) {
       {/* slim auth nav */}
       <header className="border-b border-rule">
         <nav className="mx-auto max-w-[1320px] px-6 md:px-10 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="inline-flex items-center justify-center w-11 h-11 rounded-lg border border-rule bg-white overflow-hidden">
-              <img src="/logo.svg" alt="BHnifty logo" className="w-8 h-8 object-contain grayscale" />
-            </span>
-            <span className="font-serif font-semibold text-2xl tracking-tight">BHnifty</span>
+          <Link
+            to="/"
+            aria-label="Back to home"
+            className="btn-lift inline-flex items-center justify-center w-13 h-13 rounded-lg border border-rule bg-panel text-ink hover:border-ink"
+          >
+            <Icon name="arrow-left" className="w-6 h-6" />
           </Link>
           <div className="flex items-center gap-3">
             <button className="btn-lift bg-ink text-paper text-[13px] font-bold px-6 h-11 rounded-lg cursor-pointer">
@@ -77,20 +77,23 @@ export default function Login({ isDark, onToggleTheme }) {
       </header>
 
       <main className="flex-1 mx-auto w-full max-w-[1320px] px-6 md:px-10 py-14 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        {/* noir handshake illustration — final asset to be supplied */}
-        <div data-illustration className="hidden lg:block">
-          <Placeholder label="HANDSHAKE" ratio="4 / 3" className="border-none bg-transparent" />
+        {/* noir handshake — floats on the paper, monochrome by design */}
+        <div data-illustration className="hidden lg:block overflow-visible">
+          <img
+            src="/handshake.png"
+            alt="Noir engraving of a handshake over cash"
+            className="w-full h-auto"
+            style={{ transform: 'translate(0px, -102px) scale(1.2)', transformOrigin: 'center' }}
+          />
         </div>
 
         <div className="w-full max-w-[520px] lg:justify-self-end">
-          <Link
+          <span
             data-field
-            to="/"
-            className="inline-flex items-center gap-3 uppercase tracking-[0.3em] text-[11px] font-bold text-ink-soft hover:text-ink transition-colors"
+            className="inline-block uppercase tracking-[0.3em] text-[11px] font-bold text-ink-soft"
           >
-            <Icon name="arrow-left" className="w-4 h-4" />
             Welcome Back
-          </Link>
+          </span>
 
           <h1 data-field className="mt-5 font-serif font-semibold text-4xl md:text-5xl tracking-tight">
             Sign in to BHnifty
