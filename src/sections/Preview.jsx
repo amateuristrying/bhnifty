@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, motionOK } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, motionOK, revealHeadline, revealParagraph } from '../lib/motion'
 import Icon from '../components/Icon'
 import Sparkline from '../components/Sparkline'
 import useLiveTicks, { fmtPrice, fmtPct } from '../lib/useLiveTicks'
@@ -103,20 +103,15 @@ export default function Preview() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-title] > *'), {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: SETTLE,
-        stagger: 0.08,
-        scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
-      })
+      revealHeadline(q('[data-title] h2'), { y: 38, rotateX: 14 })
+      revealParagraph(q('[data-title] p'), { y: 22 })
+
       const tl = gsap.timeline({
         scrollTrigger: { trigger: q('[data-panels]')[0], start: 'top 80%', once: true },
       })
-      tl.from(q('[data-panel]'), { y: 24, opacity: 0, duration: 0.6, ease: SETTLE })
-        .from(q('[data-row]'), { y: 10, opacity: 0, duration: 0.4, ease: SETTLE, stagger: 0.07 }, '-=0.2')
-        .from(q('[data-tile]'), { y: 10, opacity: 0, duration: 0.4, ease: SETTLE, stagger: 0.07 }, '<')
+      tl.from(q('[data-panel]'), { y: 28, opacity: 0, duration: 0.7, ease: SETTLE, stagger: 0.12 })
+        .from(q('[data-row]'), { y: 14, opacity: 0, filter: 'blur(3px)', duration: 0.45, ease: SETTLE, stagger: 0.07 }, '-=0.3')
+        .from(q('[data-tile]'), { y: 14, opacity: 0, scale: 0.95, duration: 0.45, ease: SETTLE, stagger: 0.06 }, '<')
       q('[data-spark-line]').forEach((p, i) => {
         const len = p.getTotalLength()
         tl.fromTo(

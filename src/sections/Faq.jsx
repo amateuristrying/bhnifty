@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, revealHeadline, revealParagraph } from '../lib/motion'
 import Icon from '../components/Icon'
 
 const FAQS = [
@@ -18,20 +18,22 @@ export default function Faq() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-head] > *'), {
-        y: 20,
+      revealHeadline(q('[data-head] h2'), { y: 38, rotateX: 14 })
+      revealParagraph(q('[data-head] p'), { y: 20 })
+      gsap.from(q('[data-head] span'), {
+        y: 16,
         opacity: 0,
         duration: 0.6,
         ease: SETTLE,
-        stagger: 0.08,
         scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
       })
       gsap.from(q('[data-item]'), {
-        y: 14,
+        y: 20,
         opacity: 0,
-        duration: 0.5,
+        filter: 'blur(3px)',
+        duration: 0.55,
         ease: SETTLE,
-        stagger: 0.07,
+        stagger: 0.08,
         scrollTrigger: { trigger: q('[data-list]')[0], start: 'top 85%', once: true },
       })
     })

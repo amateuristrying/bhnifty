@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, revealHeadline, revealParagraph } from '../lib/motion'
 import RupeeCircuit, { ROWS } from '../components/RupeeCircuit'
 
 const LEFT = [
@@ -41,14 +41,8 @@ export default function Features() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-title] > *'), {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: SETTLE,
-        stagger: 0.08,
-        scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
-      })
+      revealHeadline(q('[data-title] h2'), { y: 36, rotateX: 14 })
+      revealParagraph(q('[data-title] p'), { y: 22 })
 
       const circuitTl = gsap.timeline({
         scrollTrigger: { trigger: q('[data-circuit]')[0], start: 'top 78%', once: true },
@@ -78,13 +72,13 @@ export default function Features() {
       circuitTl.from(q('[data-node]'), { scale: 0, transformOrigin: 'center', duration: 0.3, ease: SETTLE, stagger: 0.04 }, 0.6)
       circuitTl.from(
         q('[data-feature="left"]'),
-        { x: -14, opacity: 0, duration: 0.4, ease: SETTLE, stagger: 0.07 },
-        0.5,
+        { x: -24, opacity: 0, filter: 'blur(4px)', duration: 0.55, ease: SETTLE, stagger: 0.08 },
+        0.45,
       )
       circuitTl.from(
         q('[data-feature="right"]'),
-        { x: 14, opacity: 0, duration: 0.4, ease: SETTLE, stagger: 0.07 },
-        0.56,
+        { x: 24, opacity: 0, filter: 'blur(4px)', duration: 0.55, ease: SETTLE, stagger: 0.08 },
+        0.5,
       )
     })
     return () => mm.revert()

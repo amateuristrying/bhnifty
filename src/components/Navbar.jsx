@@ -47,11 +47,12 @@ export default function Navbar({ isDark, onToggleTheme }) {
       className="sticky top-0 z-50 bg-paper/90 backdrop-blur-md border-b border-rule transition-colors duration-300"
     >
       <nav className="mx-auto max-w-[1320px] px-6 md:px-10 h-20 flex items-center justify-between gap-6">
-        <Link to="/" className="flex items-center gap-3 shrink-0">
-          <span className="inline-flex items-center justify-center w-11 h-11 rounded-lg border border-rule bg-white overflow-hidden">
-            <img src="/logo.svg" alt="BHnifty logo" className="w-8 h-8 object-contain grayscale" />
-          </span>
-          <span className="font-serif font-semibold text-2xl tracking-tight">BHnifty</span>
+        <Link to="/" className="flex items-center shrink-0 group py-1" aria-label="BHnifty Home">
+          <img
+            src="/logo.png"
+            alt="bhnifty"
+            className="h-8 md:h-9 w-auto object-contain dark:invert transition-transform duration-300 group-hover:scale-[1.03]"
+          />
         </Link>
 
         <div className="hidden lg:flex items-center gap-10">

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, revealHeadline, revealParagraph } from '../lib/motion'
 import CandleChart from '../components/CandleChart'
 
 const CARDS = [
@@ -16,20 +16,22 @@ export default function About() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-head] > *'), {
-        y: 20,
+      revealHeadline(q('[data-head] h2'), { y: 38, rotateX: 14 })
+      revealParagraph(q('[data-head] p'), { y: 22 })
+      gsap.from(q('[data-head] span'), {
+        y: 16,
         opacity: 0,
         duration: 0.6,
         ease: SETTLE,
-        stagger: 0.09,
         scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
       })
       gsap.from(q('[data-card]'), {
-        y: 18,
+        y: 24,
         opacity: 0,
-        duration: 0.55,
+        filter: 'blur(4px)',
+        duration: 0.6,
         ease: SETTLE,
-        stagger: 0.09,
+        stagger: 0.1,
         scrollTrigger: { trigger: q('[data-cards]')[0], start: 'top 85%', once: true },
       })
 

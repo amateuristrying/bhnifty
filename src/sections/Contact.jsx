@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, revealHeadline, revealParagraph } from '../lib/motion'
 import Icon from '../components/Icon'
 
 function Field({ label, name, type = 'text', textarea = false, placeholder }) {
@@ -46,13 +46,22 @@ export default function Contact() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-head] > *, [data-form]'), {
-        y: 20,
+      revealHeadline(q('[data-head] h2'), { y: 38, rotateX: 14 })
+      revealParagraph(q('[data-head] p'), { y: 22 })
+      gsap.from(q('[data-head] span'), {
+        y: 16,
         opacity: 0,
         duration: 0.6,
         ease: SETTLE,
-        stagger: 0.08,
         scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
+      })
+      gsap.from(q('[data-form]'), {
+        y: 28,
+        opacity: 0,
+        filter: 'blur(4px)',
+        duration: 0.7,
+        ease: SETTLE,
+        scrollTrigger: { trigger: q('[data-form]')[0], start: 'top 85%', once: true },
       })
     })
     return () => mm.revert()

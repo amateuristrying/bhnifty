@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, ScrollTrigger } from '../lib/motion'
+import { gsap, SETTLE, REVEAL_START, MOTION_QUERY, ScrollTrigger, revealHeadline, scrubWords } from '../lib/motion'
 import Icon from '../components/Icon'
+
+const THESIS_WORDS = "Standard trading setups require juggling multiple tabs, scattered tools, and inconsistent data — slowing you down when it matters most. BHnifty brings everything you need into one intelligent, real-time dashboard built for serious traders. From live market insights to smart alerts, we simplify complexity so you can focus on what truly matters — making better decisions, faster.".split(" ")
 
 const VALUES = [
   { icon: 'monitor', title: 'One Dashboard', desc: 'No more switching between tabs. Analyze all 14 major stocks in one clean, responsive dashboard.' },
@@ -19,18 +21,14 @@ export default function Why() {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
-      gsap.from(q('[data-thesis] > *'), {
-        y: 18,
-        opacity: 0,
-        duration: 0.6,
-        ease: SETTLE,
-        stagger: 0.08,
-        scrollTrigger: { trigger: root.current, start: REVEAL_START, once: true },
-      })
+      revealHeadline(q('[data-thesis] h2'), { y: 38, rotateX: 12 })
+      scrubWords(q('[data-scrub-thesis]')[0])
+
       gsap.from(q('[data-value]'), {
-        y: 16,
+        y: 24,
         opacity: 0,
-        duration: 0.5,
+        filter: 'blur(4px)',
+        duration: 0.6,
         ease: SETTLE,
         stagger: 0.08,
         scrollTrigger: { trigger: q('[data-values]')[0], start: 'top 82%', once: true },
@@ -66,12 +64,12 @@ export default function Why() {
             <h2 className="font-serif font-semibold text-4xl md:text-6xl tracking-tight">
               Why Choose BHnifty?
             </h2>
-            <p className="mt-6 text-ink-soft leading-[1.7] max-w-xl">
-              Standard trading setups require juggling multiple tabs, scattered tools, and
-              inconsistent data — slowing you down when it matters most. BHnifty brings everything
-              you need into one intelligent, real-time dashboard built for serious traders. From
-              live market insights to smart alerts, we simplify complexity so you can focus on what
-              truly matters — making better decisions, faster.
+            <p data-scrub-thesis className="mt-6 text-ink leading-[1.75] text-[16px] max-w-xl">
+              {THESIS_WORDS.map((w, i) => (
+                <span key={i} data-scrub-word className="inline-block mr-1.5 opacity-20 transition-opacity">
+                  {w}
+                </span>
+              ))}
             </p>
           </div>
 

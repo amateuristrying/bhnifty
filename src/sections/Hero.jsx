@@ -15,27 +15,41 @@ const STRIP = [
 export default function Hero({ isDark }) {
   const root = useRef(null)
 
-  /* Entry flow: eyebrow → serif lines rise (90ms stagger) → italic lands last
-     → actions fade up → capability strip staggers along the bottom rule */
+  /* Entry flow: eyebrow → serif lines rise with 3D perspective → subtitle blur-rise
+     → actions fade up → capability strip staggers along the bottom rule.
+     Scroll flow: gentle parallax drift as user scrolls down. */
   useEffect(() => {
     const q = gsap.utils.selector(root)
     const mm = gsap.matchMedia(root)
     mm.add(MOTION_QUERY, () => {
       const tl = gsap.timeline({ delay: 0.15 })
-      tl.from(q('[data-eyebrow]'), { y: 16, opacity: 0, duration: 0.5, ease: SETTLE })
+      tl.from(q('[data-eyebrow]'), { y: 20, opacity: 0, duration: 0.6, ease: SETTLE })
         .from(
           q('[data-hero-line]'),
-          { y: 22, opacity: 0, duration: 0.7, ease: SETTLE, stagger: 0.09 },
-          '-=0.25',
+          { y: 36, opacity: 0, rotateX: 18, transformOrigin: '0% 100%', duration: 0.85, ease: SETTLE, stagger: 0.1 },
+          '-=0.3',
         )
-        .from(q('[data-sub]'), { y: 18, opacity: 0, duration: 0.6, ease: SETTLE }, '-=0.35')
+        .from(q('[data-sub]'), { y: 20, opacity: 0, filter: 'blur(5px)', duration: 0.7, ease: SETTLE }, '-=0.4')
         .from(q('[data-cta]'), { y: 16, opacity: 0, duration: 0.5, ease: SETTLE, stagger: 0.08 }, '-=0.3')
-        .from(q('[data-quote]'), { opacity: 0, duration: 0.7, ease: 'none' }, '-=0.2')
+        .from(q('[data-quote]'), { opacity: 0, y: 12, filter: 'blur(4px)', duration: 0.8, ease: SETTLE }, '-=0.2')
         .from(
           q('[data-strip-item]'),
-          { y: 14, opacity: 0, duration: 0.5, ease: SETTLE, stagger: 0.07 },
+          { y: 16, opacity: 0, duration: 0.6, ease: SETTLE, stagger: 0.08 },
           '-=0.4',
         )
+
+      /* Scroll parallax scrub for typography on scroll */
+      gsap.to(q('[data-hero-content]'), {
+        y: -40,
+        opacity: 0.75,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
+      })
     })
     return () => mm.revert()
   }, [])
@@ -46,7 +60,7 @@ export default function Hero({ isDark }) {
         {/* living paper — three.js dot field on the chart side */}
         <AmbientField isDark={isDark} className="hidden lg:block inset-y-0 right-0 w-1/2" opacity={0.18} />
 
-        <div className="lg:col-span-6 relative z-10">
+        <div data-hero-content className="lg:col-span-6 relative z-10">
           <p data-eyebrow className="uppercase tracking-[0.34em] text-[11px] font-bold text-ink-soft">
             Real-time Constituent Monitoring
           </p>

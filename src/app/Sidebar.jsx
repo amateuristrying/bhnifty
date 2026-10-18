@@ -85,18 +85,8 @@ export default function Sidebar({ isDark, onToggleTheme, open, onClose }) {
       >
         {/* masthead */}
         <div className="h-[100px] shrink-0 flex items-center justify-between gap-2 px-6 border-b border-rule lg:border-b-0">
-          <Link to="/" className="flex items-center gap-3 min-w-0" title="Back to the BHnifty site">
-            <span className="inline-flex items-center justify-center w-11 h-11 rounded-lg border border-rule bg-white overflow-hidden shrink-0">
-              <img src="/logo.svg" alt="" className="w-8 h-8 object-contain grayscale" />
-            </span>
-            <span className="min-w-0">
-              <span className="block font-serif font-semibold text-[22px] leading-none tracking-tight truncate">
-                BHnifty
-              </span>
-              <span className="block mt-1 text-[11px] tracking-[0.14em] text-ink-faint truncate">
-                Bharat Nifty
-              </span>
-            </span>
+          <Link to="/" className="flex items-center min-w-0" title="Back to the BHnifty site">
+            <img src="/logo.png" alt="bhnifty" className="h-8 w-auto object-contain dark:invert" />
           </Link>
           <button
             onClick={onClose}

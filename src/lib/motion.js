@@ -32,4 +32,71 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
   window.__ScrollTrigger = ScrollTrigger
 }
 
+/* Kinetic line & heading reveal on scroll with perspective */
+export function revealHeadline(elements, options = {}) {
+  if (!motionOK()) return
+  const elArray = Array.isArray(elements) ? elements : [elements]
+  if (!elArray.length || !elArray[0]) return
+  return gsap.from(elArray, {
+    y: options.y ?? 38,
+    opacity: options.opacity ?? 0,
+    rotateX: options.rotateX ?? 10,
+    transformOrigin: 'top center',
+    duration: options.duration ?? 0.8,
+    ease: options.ease ?? SETTLE,
+    stagger: options.stagger ?? 0.08,
+    scrollTrigger: options.scrollTrigger ?? {
+      trigger: elArray[0],
+      start: options.start ?? REVEAL_START,
+      once: true,
+    },
+    ...options.extra,
+  })
+}
+
+/* Soft blur-and-rise for paragraphs and body descriptions */
+export function revealParagraph(elements, options = {}) {
+  if (!motionOK()) return
+  const elArray = Array.isArray(elements) ? elements : [elements]
+  if (!elArray.length || !elArray[0]) return
+  return gsap.from(elArray, {
+    y: options.y ?? 22,
+    opacity: options.opacity ?? 0,
+    filter: 'blur(6px)',
+    duration: options.duration ?? 0.75,
+    ease: options.ease ?? SETTLE,
+    stagger: options.stagger ?? 0.06,
+    scrollTrigger: options.scrollTrigger ?? {
+      trigger: elArray[0],
+      start: options.start ?? 'top 88%',
+      once: true,
+    },
+    ...options.extra,
+  })
+}
+
+/* Scroll-scrubbed text reveal: words gradually illuminate as you scroll past */
+export function scrubWords(container, wordSelector = '[data-scrub-word]') {
+  if (!motionOK() || !container) return
+  const words = container.querySelectorAll(wordSelector)
+  if (!words.length) return
+  return gsap.fromTo(
+    words,
+    { opacity: 0.18, y: 4 },
+    {
+      opacity: 1,
+      y: 0,
+      stagger: 0.06,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 80%',
+        end: 'bottom 55%',
+        scrub: 0.8,
+      },
+    }
+  )
+}
+
 export { gsap, ScrollTrigger }
+

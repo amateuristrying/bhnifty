@@ -55,11 +55,8 @@ export default function Footer() {
       <div className="mx-auto max-w-[1320px] px-6 md:px-10 pt-16 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div data-col>
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-rule bg-white overflow-hidden">
-                <img src="/logo.svg" alt="BHnifty logo" className="w-7 h-7 object-contain grayscale" />
-              </span>
-              <span className="font-serif font-semibold text-2xl tracking-tight">BHnifty</span>
+            <div className="flex items-center">
+              <img src="/logo.png" alt="bhnifty" className="h-8 w-auto object-contain dark:invert" />
             </div>
             <p className="mt-4 text-[13.5px] leading-[1.7] text-ink-soft max-w-[260px]">
               The premium unified analytics console built for Nifty constituent traders and rotation
