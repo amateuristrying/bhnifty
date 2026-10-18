@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { gsap, SETTLE, MOTION_QUERY } from '../lib/motion'
+import { useAuth } from '../lib/auth'
 import useSmoothScroll from '../lib/useSmoothScroll'
 import Icon from '../components/Icon'
 import ThemeToggle from '../components/ThemeToggle'
@@ -21,6 +22,11 @@ export default function Login({ isDark, onToggleTheme }) {
   const root = useRef(null)
   const [showPassword, setShowPassword] = useState(false)
   const [working, setWorking] = useState(false)
+  const [email, setEmail] = useState('')
+  const { user, signIn } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from ?? '/app'
 
   /* same inertial feel as the landing page; no section snapping here */
   useSmoothScroll()
@@ -45,11 +51,25 @@ export default function Login({ isDark, onToggleTheme }) {
     return () => mm.revert()
   }, [])
 
+  /* already signed in — go straight through */
+  if (user) return <Navigate to={from} replace />
+
   function handleSubmit(e) {
     e.preventDefault()
     setWorking(true)
-    /* real auth flow arrives with the dashboard stage */
-    setTimeout(() => setWorking(false), 1200)
+    /* placeholder session: any credentials open the console */
+    setTimeout(() => {
+      signIn(email)
+      navigate(from, { replace: true })
+    }, 700)
+  }
+
+  function handleGoogle() {
+    setWorking(true)
+    setTimeout(() => {
+      signIn(email || 'trader@bhnifty.in')
+      navigate(from, { replace: true })
+    }, 700)
   }
 
   const inputCls =
@@ -108,7 +128,15 @@ export default function Login({ isDark, onToggleTheme }) {
               <label htmlFor="email" className="block text-[13px] font-bold text-ink mb-2">
                 Email
               </label>
-              <input id="email" type="email" required placeholder="you@example.com" className={inputCls} />
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={inputCls}
+              />
             </div>
 
             <div data-field>
@@ -163,7 +191,9 @@ export default function Login({ isDark, onToggleTheme }) {
             <button
               data-field
               type="button"
-              className="btn-lift w-full inline-flex items-center justify-center gap-3 border border-rule bg-panel text-ink uppercase tracking-[0.24em] text-[11px] font-bold h-13 rounded-lg hover:border-ink cursor-pointer"
+              onClick={handleGoogle}
+              disabled={working}
+              className="btn-lift w-full inline-flex items-center justify-center gap-3 border border-rule bg-panel text-ink uppercase tracking-[0.24em] text-[11px] font-bold h-13 rounded-lg hover:border-ink disabled:opacity-60 disabled:pointer-events-none cursor-pointer"
             >
               <GoogleG className="w-4.5 h-4.5" />
               Continue with Google

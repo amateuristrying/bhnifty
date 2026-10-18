@@ -20,6 +20,16 @@
   --color-up-soft: var(--up-soft);
   --color-down: var(--down);
   --color-down-soft: var(--down-soft);
+
+  /* Five-step heat scale for the weight maps: strong down → flat → strong up */
+  --color-heat-2d: var(--heat-2d);
+  --color-heat-1d: var(--heat-1d);
+  --color-heat-0: var(--heat-0);
+  --color-heat-1u: var(--heat-1u);
+  --color-heat-2u: var(--heat-2u);
+
+  /* The one accent in the system — a greeting, never a value */
+  --color-accent: var(--accent);
 }
 
 /* Light — paper */
@@ -34,6 +44,12 @@
   --up-soft: #e6f3ea;
   --down: #dc2626;
   --down-soft: #fdeceb;
+  --heat-2u: #d5efdd;
+  --heat-1u: #ecf7ef;
+  --heat-0: #f3f2ef;
+  --heat-1d: #fcefed;
+  --heat-2d: #fadcd8;
+  --accent: #c2410c;
   --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -49,6 +65,12 @@
   --up-soft: #132a1b;
   --down: #f87171;
   --down-soft: #2c1514;
+  --heat-2u: #17361f;
+  --heat-1u: #0f2315;
+  --heat-0: #1a1a18;
+  --heat-1d: #2b1614;
+  --heat-2d: #40201c;
+  --accent: #fb923c;
 }
 
 body {
@@ -120,6 +142,69 @@ html.lenis body {
 .bhn-candle {
   transform-box: fill-box;
   transform-origin: 50% 100%;
+}
+
+/* ── Console surfaces ──────────────────────────────────────────────────── */
+
+/* The app's scroll region keeps a slim, ink-coloured bar in both themes */
+.app-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+.app-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.app-scroll::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 999px;
+  border: 3px solid var(--paper);
+}
+.app-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-faint);
+}
+.app-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Horizontal tab strips scroll on narrow screens without showing a bar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Heat tiles rise a hair under the pointer */
+.heat-tile {
+  transition: transform 0.18s var(--ease-settle), box-shadow 0.18s var(--ease-settle),
+    border-color 0.18s ease;
+}
+.heat-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px -8px rgb(0 0 0 / 0.28);
+  z-index: 1;
+}
+
+/* The live pulse beside "Live" and the market-status dot */
+@keyframes bhn-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+.pulse-dot {
+  animation: bhn-pulse 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot {
+    animation: none;
+  }
 }
 
 /* Underline-field form — baseline ink-in on focus */
